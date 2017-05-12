@@ -3,10 +3,13 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 from flask.ext.heroku import Heroku
 
+import krakenex
+
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/pre-registration'
 heroku = Heroku(app)
 db = SQLAlchemy(app)
+krapi = krakenex.API()
 
 # Create our database model
 class User(db.Model):
@@ -23,6 +26,8 @@ class User(db.Model):
 # Set "homepage" to index.html
 @app.route('/')
 def index():
+    xbt_ticker = krapi.query_public('Ticker',{'pair': 'XXBTZUSD'})
+    xbt_price = xbt_ticker['result']['XXBTZUSD']['a'][0]
     return render_template('index.html')
 
 # Save e-mail to database and send to success page

@@ -9,3 +9,4 @@ gunicorn==19.0.0
 itsdangerous==0.24
 psycopg2==2.5.3
 wsgiref==0.1.2
+krakenex==0.1.4

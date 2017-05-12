@@ -18,10 +18,18 @@
 <body>
     <div class="container-full">
         <div class="row">
-            <div class="col-lg-12 text-center v-center">
+            <div class="col-lg-8 text-center v-center">
                 <h1>Krakener</h1>
                 <p class="lead">Crypto currency trading bot</p>
                 <br>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>XBT/USD Price</h3>
+                    </div>
+		    <div class="panel-body">
+			{{ xbt_price }}
+		    </div>
+                </div>
                 <!--<form class="col-lg-12" action="{{url_for('prereg')}}" method="POST">-->
                     <!--<div class="input-group" style="width:340px;text-align:center;margin:0 auto;">-->
                         <!--<input class="form-control input-lg" title="Don't worry. We hate spam, and will not share your email with anyone." placeholder="Enter your email address" type="email" name="email">-->
