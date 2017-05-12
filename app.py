@@ -28,7 +28,7 @@ class User(db.Model):
 def index():
     xbt_ticker = krapi.query_public('Ticker',{'pair': 'XXBTZUSD'})
     xbt_price = xbt_ticker['result']['XXBTZUSD']['a'][0]
-    return render_template('index.html')
+    return render_template('index.html', xbt_price=xbt_price)
 
 # Save e-mail to database and send to success page
 @app.route('/prereg', methods=['POST'])
