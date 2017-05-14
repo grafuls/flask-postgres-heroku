@@ -44,6 +44,12 @@ def prereg():
             return render_template('success.html')
     return render_template('index.html')
 
+@app.route('/price?<pair>', methods=['GET'])
+def price(pair):
+    ticker = krapi.query_public('Ticker',{'pair': pair})
+    price = ticker['result'][pair]['a'][0]
+    return jsonify(price=price)
+
 @app.route('/prices', methods=['GET'])
 def prices():
     xbt_ticker = krapi.query_public('Ticker',{'pair': 'XXBTZUSD'})
