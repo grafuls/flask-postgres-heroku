@@ -15,10 +15,14 @@
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 
-<script>
-	while (true){
-		$.getJSON('/prices', function(data){$("#xbt_price").text(data.xbt_price)})
-	}
+<script type="text/javascript">
+	setInterval(function () {
+			$.getJSON('/prices', function (data) {
+				if (data.xbt_price == true){
+					$("#xbt_price").text(data.xbt_price);
+				}
+			});
+		}, 1000);
 </script>
 
 <body>
