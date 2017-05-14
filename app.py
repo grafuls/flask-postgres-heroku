@@ -48,7 +48,7 @@ def prereg():
 def price(pair):
     ticker = krapi.query_public('Ticker',{'pair': pair})
     price = ticker['result'][pair]['a'][0]
-    return jsonify(price=price)
+    return jsonify(pair=pair, price=price)
 
 @app.route('/prices', methods=['GET'])
 def prices():
