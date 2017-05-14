@@ -16,11 +16,23 @@
 </head>
 
 <script type="text/javascript">
+	old_price = {{ xbt_price }}
 	setInterval(function () {
 			$.getJSON('/prices', function (data) {
+				new_price = data.xbt_price
 				$("#xbt_price").text(data.xbt_price);
+				if (new_price > old_price) {
+					$("#xbt_price").css("color", "green")
+				}
+				else if (new_price == old_price) {
+					$("#xbt_price").css("color", "black")
+				}
+				else {
+					$("#xbt_price").css("color", "red")
+				}
+				old_price = new_price
 			});
-		}, 100000);
+		}, 10000);
 </script>
 
 <body>
