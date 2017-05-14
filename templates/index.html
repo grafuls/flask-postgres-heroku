@@ -18,9 +18,7 @@
 <script type="text/javascript">
 	setInterval(function () {
 			$.getJSON('/prices', function (data) {
-				if (data.xbt_price == true){
-					$("#xbt_price").text(data.xbt_price);
-				}
+				$("#xbt_price").text(data.xbt_price);
 			});
 		}, 1000);
 </script>
