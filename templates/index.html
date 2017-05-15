@@ -16,21 +16,42 @@
 </head>
 
 <script type="text/javascript">
-	old_price = {{ xbt_price }}
+	END_POINT = '/price/'
+	XBT_PAIR = "XXBTZUSD"
+	old_xbt_price = {{ xbt_price }}
 	setInterval(function () {
-			$.getJSON('/prices', function (data) {
-				new_price = data.xbt_price
+			$.getJSON(END_POINT.concat(XBT_PAIR), function (data) {
+				new_xbt_price = data.xbt_price
 				$("#xbt_price").text(data.xbt_price);
-				if (new_price > old_price) {
+				if (new_xbt_price > old_xbt_price) {
 					$("#xbt_price").css("color", "green")
 				}
-				else if (new_price == old_price) {
+				else if (new_xbt_price == old_xbt_price) {
 					$("#xbt_price").css("color", "black")
 				}
 				else {
 					$("#xbt_price").css("color", "red")
 				}
-				old_price = new_price
+				old_xbt_price = new_xbt_price
+			});
+		}, 10000);
+
+	ETH_PAIR = "XETHZUSD"
+	old_eth_price = {{ eth_price }}
+	setInterval(function () {
+			$.getJSON(END_POINT.concat(ETH_PAIR), function (data) {
+				new_eth_price = data.eth_price
+				$("#eth_price").text(data.eth_price);
+				if (new_eth_price > old_eth_price) {
+					$("#ethprice").css("color", "green")
+				}
+				else if (new_eth_price == old_eth_price) {
+					$("#eth_price").css("color", "black")
+				}
+				else {
+					$("#eth_price").css("color", "red")
+				}
+				old_eth_price = new_eth_price
 			});
 		}, 10000);
 </script>
@@ -66,6 +87,16 @@
 			    </div>
 			</div>
 		</div>
+		<div class="col-md-4">
+			<div class="panel panel-default">
+			    <div class="panel-heading">
+				<h3>ETH/USD Price</h3>
+			    </div>
+			    <div class="panel-heading">
+				<h2 id="eth_price">{{ eth_price }}</h2>
+			    </div>
+			</div>
+	        </div>
 		<div class="col-md-4">
 	        </div>
             <!--<div class="col-lg-12 text-center v-center" style="font-size:39pt;">-->

@@ -26,9 +26,13 @@ class User(db.Model):
 # Set "homepage" to index.html
 @app.route('/')
 def index():
-    xbt_ticker = krapi.query_public('Ticker',{'pair': 'XXBTZUSD'})
-    xbt_price = xbt_ticker['result']['XXBTZUSD']['a'][0]
-    return render_template('index.html', xbt_price=xbt_price)
+    XBT_PAIR = 'XXBTZUSD'
+    ETH_PAIR = 'XETHZUSD'
+    xbt_ticker = krapi.query_public('Ticker',{'pair': XBT_PAIR})
+    xbt_price = xbt_ticker['result'][XBT_PAIR]['a'][0]
+    eth_ticker = krapi.query_public('Ticker',{'pair': ETH_PAIR})
+    eth_price = eth_ticker['result'][ETH_PAIR]['a'][0]
+    return render_template('index.html', xbt_price=xbt_price, eth_price=eth_price)
 
 # Save e-mail to database and send to success page
 @app.route('/prereg', methods=['POST'])
