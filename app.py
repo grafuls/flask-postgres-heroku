@@ -53,16 +53,12 @@ def prereg():
 
 @app.route('/price/<pair>', methods=['GET'])
 def price(pair):
-    try:
-        ticker = krapi.query_public('Ticker', {'pair': pair})
-        print(pair)
-        # price = ticker['result'][pair]['a'][0]
-        prices = {}
-        for price, value in ticker['result'].items():
-            prices[price] = value['a'][0]
-        return jsonify(pair=pair, prices=prices)
-    except Exception as ex:
-        print(ex)
+    ticker = krapi.query_public('Ticker', {'pair': pair})
+    # price = ticker['result'][pair]['a'][0]
+    prices = {}
+    for price, value in ticker['result'].items():
+        prices[price] = value['a'][0]
+    return jsonify(pair=pair, prices=prices)
 
 
 @app.route('/prices', methods=['GET'])
