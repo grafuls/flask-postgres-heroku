@@ -29,10 +29,10 @@ class User(db.Model):
 def index():
     XBT_PAIR = 'XXBTZUSD'
     ETH_PAIR = 'XETHZUSD'
-    xbt_ticker = krapi.query_public('Ticker', {'pair': XBT_PAIR})
-    xbt_price = xbt_ticker['result'][XBT_PAIR]['a'][0]
-    eth_ticker = krapi.query_public('Ticker', {'pair': ETH_PAIR})
-    eth_price = eth_ticker['result'][ETH_PAIR]['a'][0]
+    PAIR = ','.join([XBT_PAIR, ETH_PAIR])
+    ticker = krapi.query_public('Ticker', {'pair': PAIR})
+    xbt_price = ticker['result'][XBT_PAIR]['a'][0]
+    eth_price = ticker['result'][ETH_PAIR]['a'][0]
     return render_template(
             'index.html', xbt_price=xbt_price, eth_price=eth_price)
 
