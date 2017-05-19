@@ -58,7 +58,7 @@ def price(pair):
         print(pair)
         # price = ticker['result'][pair]['a'][0]
         prices = {}
-        for price, value in ticker['result'].iteritems():
+        for price, value in ticker['result'].items():
             prices[price] = value['a'][0]
         return jsonify(pair=pair, prices=prices)
     except Exception as ex:
