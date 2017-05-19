@@ -21,7 +21,7 @@
 	old_xbt_price = {{ xbt_price }}
 	old_eth_price = {{ eth_price }}
 
-	function colorizer(new_price, old_price, label):
+	function colorizer(new_price, old_price, label) {
 			if (new_price > old_price) {
 				$(label).css("color", "green")
 			}
@@ -31,6 +31,7 @@
 			else {
 				$(label).css("color", "red")
 			}
+	}
 		
 
 	setInterval(function () {
