@@ -77,14 +77,15 @@ class Factors(db.Model):
 
     def __init__(
             self,
+            ledger_id,
             usd=0,
             xbt=0,
-            eth=0,
-            ledger_id):
+            eth=0
+            ):
+        self.ledger_id = ledger_id
         self.usd = usd
         self.xbt = xbt
         self.eth = eth
-        self.ledger_id = ledger_id
 
 
 # Set "homepage" to index.html
