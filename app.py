@@ -106,7 +106,7 @@ def index():
     return render_template(
             'index.html',
             xbt_price=xbt_price,
-            eth_price=eth_price
+            eth_price=eth_price,
             usd_balance=balance.usd,
             xbt_balance=balance.xbt,
             eth_balance=balance.eth,
