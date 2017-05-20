@@ -4,8 +4,10 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.heroku import Heroku
 
 import krakenex
+import os
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 krapi = krakenex.API()
@@ -23,6 +25,17 @@ class User(db.Model):
     def __repr__(self):
         return '<E-mail %r>' % self.email
 
+
+class History(db.Model):
+    __tablename__ = "history"
+    id = db.Column(db.Integer, primary_key=True)
+    currency = db.Column(db.String(8))
+    value = db.Column(db.Numeric())
+    timestamp = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
+
+    def __init__(self, currency, value):
+	self.currency = currency
+	self.value = value
 
 # Set "homepage" to index.html
 @app.route('/')
@@ -61,13 +74,6 @@ def price(pair):
     return jsonify(pair=pair, prices=prices)
 
 
-@app.route('/prices', methods=['GET'])
-def prices():
-    xbt_ticker = krapi.query_public('Ticker', {'pair': 'XXBTZUSD'})
-    xbt_price = xbt_ticker['result']['XXBTZUSD']['a'][0]
-    return jsonify(xbt_price=xbt_price)
-
-
 if __name__ == '__main__':
-    # app.debug = True
+    app.debug = True
     app.run()
