@@ -101,8 +101,16 @@ def index():
     ticker = krapi.query_public('Ticker', {'pair': PAIR})
     xbt_price = ticker['result'][XBT_PAIR]['a'][0]
     eth_price = ticker['result'][ETH_PAIR]['a'][0]
+    
+    balance = db.session.query(Ledger).order_by(Ledger.id.desc()).first()
     return render_template(
-            'index.html', xbt_price=xbt_price, eth_price=eth_price)
+            'index.html',
+            xbt_price=xbt_price,
+            eth_price=eth_price
+            usd_balance=balance.usd,
+            xbt_balance=balance.xbt,
+            eth_balance=balance.eth,
+            )
 
 
 # Save e-mail to database and send to success page
