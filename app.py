@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -31,11 +32,12 @@ class History(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(8))
     value = db.Column(db.Numeric())
-    timestamp = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
+    timestamp = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def __init__(self, currency, value):
-	self.currency = currency
-	self.value = value
+        self.currency = currency
+        self.value = value
+
 
 # Set "homepage" to index.html
 @app.route('/')
