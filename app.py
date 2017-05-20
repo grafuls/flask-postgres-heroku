@@ -71,8 +71,12 @@ def price(pair):
     ticker = krapi.query_public('Ticker', {'pair': pair})
     # price = ticker['result'][pair]['a'][0]
     prices = {}
-    for price, value in ticker['result'].items():
-        prices[price] = value['a'][0]
+    for pair, prices in ticker['result'].items():
+        maker_price = prices['a'][0]
+        h = History(pair, maker_price)
+        db.session.add(h)
+        db.session.commit()
+        prices[pair] = maker_price
     return jsonify(pair=pair, prices=prices)
 
 
