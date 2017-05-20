@@ -31,7 +31,7 @@ class History(db.Model):
     __tablename__ = "history"
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String(8))
-    value = db.Column(db.Numeric(5))
+    value = db.Column(db.Numeric(10,5))
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def __init__(self, currency, value):
