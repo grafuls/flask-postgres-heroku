@@ -8,6 +8,7 @@ import krakenex
 import os
 
 app = Flask(__name__)
+# SQLAlchemy config
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 heroku = Heroku(app)
 db = SQLAlchemy(app)
