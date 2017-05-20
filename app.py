@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask.ext.heroku import Heroku
 
-import flask_sqlalchemy
 import krakenex
 import os
 
@@ -77,7 +76,6 @@ class Factors(db.Model):
     eth = db.Column(db.Numeric(10, 5))
     ledger_id = db.Column(
         db.Integer,
-        flask_sqlalchemy.sqlalchemy.schema.ForeignKey("ledger.id"),
         nullable=False
         )
 
