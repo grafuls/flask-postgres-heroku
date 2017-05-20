@@ -1,10 +1,10 @@
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_sqlalchemy.sqlalchemy.schema import ForeignKey
 
 from flask.ext.heroku import Heroku
 
+import flask_sqlalchemy
 import krakenex
 import os
 
@@ -58,6 +58,7 @@ class Ledger(db.Model):
             xbt=0,
             eth=0,
             rate=0,
+            commision=0,
             direction=None):
         self.description = description
         self.usd = usd
@@ -74,7 +75,11 @@ class Factors(db.Model):
     usd = db.Column(db.Numeric(10, 5))
     xbt = db.Column(db.Numeric(10, 5))
     eth = db.Column(db.Numeric(10, 5))
-    ledger_id = db.Column(db.Integer, ForeignKey("ledger.id"), nullable=False)
+    ledger_id = db.Column(
+        db.Integer,
+        flask_sqlalchemy.sqlalchemy.schema.ForeignKey("ledger.id"),
+        nullable=False
+        )
 
     def __init__(
             self,
