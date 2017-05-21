@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
-from flask.ext.heroku import Heroku
+from flask_heroku import Heroku
 
 import krakenex
 import os
@@ -102,7 +102,7 @@ def index():
     ticker = krapi.query_public('Ticker', {'pair': PAIR})
     xbt_price = ticker['result'][XBT_PAIR]['a'][0]
     eth_price = ticker['result'][ETH_PAIR]['a'][0]
-    
+
     balance = db.session.query(Ledger).order_by(Ledger.id.desc()).first()
     return render_template(
             'index.html',

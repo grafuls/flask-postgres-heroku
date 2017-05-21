@@ -1,8 +1,10 @@
-import celery
+from celery import Celery
+
+import app
 import os
 
-app = celery.Celery('krakener')
-app.conf.update(BROKER_URL=os.environ['REDIS_URL'],
+celery = Celery(app.name)
+celery.conf.update(BROKER_URL=os.environ['REDIS_URL'],
                 CELERY_RESULT_BACKEND=os.environ['REDIS_URL'])
 
 
