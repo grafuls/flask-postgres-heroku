@@ -5,6 +5,7 @@ import app
 import os
 
 celery = Celery(app.__name__)
+celery.config_from_object(app.__name__)
 celery.conf.update(BROKER_URL=os.environ['REDIS_URL'],
                    CELERY_RESULT_BACKEND=os.environ['REDIS_URL'])
 
@@ -16,7 +17,7 @@ def add(x, y):
 
 CELERYBEAT_SCHEDULE = {
     'every-second': {
-        'task': 'example.say_hello',
+        'task': 'tasks.add',
         'schedule': timedelta(seconds=5),
     },
 }
