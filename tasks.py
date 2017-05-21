@@ -18,5 +18,6 @@ CELERYBEAT_SCHEDULE = {
     'every-second': {
         'task': 'tasks.add',
         'schedule': timedelta(seconds=5),
+        'args': (1,2),
     },
 }
