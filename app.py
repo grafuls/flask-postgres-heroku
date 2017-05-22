@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
-from models import Ledger, User, History
 
 import krakenex
 import os
@@ -9,9 +8,12 @@ import os
 app = Flask(__name__)
 # SQLAlchemy config
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 krapi = krakenex.API()
+
+from models import Ledger, User, History
 
 
 # Set "homepage" to index.html
