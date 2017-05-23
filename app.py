@@ -45,7 +45,10 @@ def index():
 @app.route('/balance', methods=['GET'])
 def balance():
     balance = db.session.query(Ledger).order_by(Ledger.id.desc()).first()
-    return jsonify(xbt_balance=balance.xbt, eth_balance=balance.eth)
+    return jsonify(
+                xbt_balance=float(balance.xbt),
+                eth_balance=float(balance.eth),
+            )
 
 
 # Save e-mail to database and send to success page
