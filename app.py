@@ -57,8 +57,8 @@ def prereg():
 
 
 @app.route('/price/<pair>', methods=['GET'])
-def price(pair):
-    ticker = krapi.query_public('Ticker', {'pair': pair})
+def price(pairs):
+    ticker = krapi.query_public('Ticker', {'pair': pairs})
     # price = ticker['result'][pair]['a'][0]
     prices = {}
     for pair, prices in ticker['result'].items():
@@ -67,7 +67,7 @@ def price(pair):
         db.session.add(h)
         db.session.commit()
         prices[pair] = maker_price
-    return jsonify(pair=pair, prices=prices)
+    return jsonify(pair=pairs, prices=prices)
 
 
 if __name__ == '__main__':
