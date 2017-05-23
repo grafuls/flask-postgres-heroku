@@ -61,7 +61,6 @@ def price(pairs):
     ticker = krapi.query_public('Ticker', {'pair': pairs})
     # price = ticker['result'][pair]['a'][0]
     prices = {}
-    import ipdb;ipdb.set_trace()
     for pair, price in ticker['result'].items():
         maker_price = price['a'][0]
         h = History(pair, maker_price)
