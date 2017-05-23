@@ -42,7 +42,7 @@ def index():
             )
 
 
-@app.route('/balance')
+@app.route('/balance', methods=['GET'])
 def balance():
     balance = db.session.query(Ledger).order_by(Ledger.id.desc()).first()
     return jsonify(xbt_balance=balance.xbt, eth_balance=balance.eth)
