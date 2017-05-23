@@ -50,8 +50,8 @@
 				colorizer(new_xbt_price, old_xbt_price, "#xbt_price")
 				$("#eth_price").text(new_eth_price);
 				colorizer(new_eth_price, old_eth_price, "#eth_price")
-				$("#usd_balance").text(new_usd_balance)
-				colorizer(new_usd_balance, old_usd_balance, "#xbt_price")
+				$("#usd_balance").text(new_usd_balance.toFixed(5))
+				colorizer(new_usd_balance, old_usd_balance, "#usd_balance")
 				old_xbt_price = new_xbt_price
 				old_eth_price = new_eth_price
 			});
@@ -78,25 +78,25 @@
         </div>
 
         <div class="row">
-            <div class="col-md-1">
-            </div>
+            <div class="col-md-1"/>
             <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 style="font-size: 20px;">NET Worth</h3>
                     </div>
                     <div class="panel-body">
-                        <h2 id="usd_balance" style="color:black">{{ usd_balance }}</h2>
+                        <h2 id="usd_balance" style="color:black">$ {{ usd_balance }}</h2>
                     </div>
                 </div>
             </div>
+            <div class="col-md-1"/>
             <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 style="font-size: 20px;">BTC Balance</h3>
                     </div>
                     <div class="panel-body">
-                        <h2 id="xbt_balance" style="color:black">{{ xbt_balance }}</h2>
+                        <h2 id="xbt_balance" style="color:black">฿ {{ xbt_balance }}</h2>
                     </div>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                         <h3 style="font-size: 20px;">ETH Balance</h3>
                     </div>
                     <div class="panel-body">
-                        <h2 id="eth_balance" style="color:black">{{ eth_balance }}</h2>
+                        <h2 id="eth_balance" style="color:black">Ξ {{ eth_balance }}</h2>
                     </div>
                 </div>
             </div>
