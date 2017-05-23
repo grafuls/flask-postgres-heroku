@@ -36,7 +36,7 @@ def index():
             'index.html',
             xbt_price=xbt_price,
             eth_price=eth_price,
-            usd_balance=usd_balance,
+            usd_balance=round(usd_balance, 5),
             xbt_balance=balance.xbt,
             eth_balance=balance.eth,
             )
