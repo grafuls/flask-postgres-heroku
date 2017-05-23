@@ -13,6 +13,10 @@
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.0/gh-fork-ribbon.min.css" />
+	<!--[if lt IE 9]>
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.0/gh-fork-ribbon.ie.min.css" />
+	<![endif]-->
 </head>
 
 <script type="text/javascript">
@@ -50,6 +54,7 @@
 </script>
 
 <body>
+	<a class="github-fork-ribbon" title="Virtual">Virtual</a>
     <nav class="navbar navbar-default" style="min-height: 10px; margin-bottom: 0px">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -72,7 +77,7 @@
             <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 style="font-size: 20px;">USD Balance</h3>
+                        <h3 style="font-size: 20px;">NET Worth</h3>
                     </div>
                     <div class="panel-body">
                         <h2 id="usd_balance" style="color:black">{{ usd_balance }}</h2>
