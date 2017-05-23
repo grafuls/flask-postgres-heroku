@@ -112,7 +112,7 @@ def _buy(source, destination):
 def convert(source, destination):
     pair = "ETHXBT"
     ticker = krapi.query_public('Ticker', {'pair': pair})
-    rate = ticker['result']['XETHXXBT']['a'][0]
+    rate = Decimal(ticker['result']['XETHXXBT']['a'][0])
     total = 0
     if source.currency == "eth":
         total = source.amount * rate
