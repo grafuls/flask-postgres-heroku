@@ -1,3 +1,4 @@
+from decimal import Decimal
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
@@ -13,7 +14,7 @@ heroku = Heroku(app)
 db = SQLAlchemy(app)
 krapi = krakenex.API()
 
-from models import Ledger, User, History
+from models import Ledger, User, History  # noqa
 
 
 # Set "homepage" to index.html
@@ -27,11 +28,15 @@ def index():
     eth_price = ticker['result'][ETH_PAIR]['a'][0]
 
     balance = db.session.query(Ledger).order_by(Ledger.id.desc()).first()
+    usd_balance = (
+        (Decimal(balance.xbt) * Decimal(xbt_price)) +
+        (Decimal(balance.eth) * Decimal(eth_price))
+    )
     return render_template(
             'index.html',
             xbt_price=xbt_price,
             eth_price=eth_price,
-            usd_balance=balance.usd,
+            usd_balance=usd_balance,
             xbt_balance=balance.xbt,
             eth_balance=balance.eth,
             )
