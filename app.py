@@ -56,7 +56,7 @@ def prereg():
     return render_template('index.html')
 
 
-@app.route('/price/<pair>', methods=['GET'])
+@app.route('/price/<pairs>', methods=['GET'])
 def price(pairs):
     ticker = krapi.query_public('Ticker', {'pair': pairs})
     # price = ticker['result'][pair]['a'][0]
