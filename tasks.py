@@ -1,7 +1,7 @@
 from app import db, krapi
 from celery import Celery
 from datetime import timedelta
-from models import History, Ledger
+from models import Factors, History, Ledger
 
 import os
 
@@ -74,24 +74,41 @@ class Money():
 
 def _buy(source, destination, balance):
     ledger = Ledger(rate=destination.usd_rate)
+    conversion = convert(source, destination)
+    factors_usd = 0
+    factors_xbt = 0
+    factors_eth = 0
     if source.currency in ("eth", "usd"):
         if destination.currency == "xbt":
-            ledger.xbt == convert(source, destination) + balance.xbt
+            ledger.xbt = conversion + balance.xbt
+            factors_xbt = conversion
             if source.currency == "usd":
                 ledger.usd = balance.usd - source.amount
+                factors_usd = - source.amount
                 ledger.eth = balance.eth
             else:
                 ledger.usd = balance.usd
                 ledger.eth = balance.eth - source.amount
+                factors_eth = - source.amount
     if source.currency in ("xbt", "usd"):
         if destination.currency == "eth":
-            ledger.eth == convert(source, destination) + balance.eth
+            ledger.eth = conversion + balance.eth
+            factors_eth = conversion
             if source.currency == "usd":
                 ledger.usd = balance.usd - source.amount
+                factors_usd = - source.amount
                 ledger.eth = balance.eth
             else:
                 ledger.usd = balance.usd
                 ledger.xbt = balance.xbt - source.amount
+                factors_xbt = - source.amount
+    db.session.add(ledger)
+    db.session.commit()
+    db.session.refresh(ledger)
+
+    factors = Factors(ledger.id, factors_usd, factors_xbt, factors_eth)
+    db.session.add(factors)
+    db.session.commit()
 
 
 def convert(source, destination):
