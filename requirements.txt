@@ -11,3 +11,4 @@ psycopg2==2.5.3
 krakenex==0.1.4
 celery==4.0.2
 redis==2.10.5
+newrelic==2.86.1.66
