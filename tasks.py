@@ -14,12 +14,6 @@ celery.conf.update(BROKER_URL=os.environ['REDIS_URL'],
 
 
 @celery.task
-def add(x, y):
-    print("%s+%s" % (x, y))
-    return x + y
-
-
-@celery.task
 def shakeThatMoneyMaker():
     XBT_PAIR = 'XXBTZUSD'
     ETH_PAIR = 'XETHZUSD'
@@ -134,8 +128,7 @@ def convert(source, destination):
 
 CELERYBEAT_SCHEDULE = {
     'every-second': {
-        'task': 'tasks.add',
-        'schedule': timedelta(seconds=5),
-        'args': (1, 2),
+        'task': 'tasks.shakeThatMoneyMaker',
+        'schedule': timedelta(seconds=20),
     },
 }
