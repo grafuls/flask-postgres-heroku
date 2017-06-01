@@ -37,6 +37,7 @@ class Ledger(db.Model):
     rate = db.Column(db.Numeric(10, 5))
     commision = db.Column(db.Numeric(10, 5))
     direction = db.Column(db.String(8))
+    timestamp = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def __init__(
             self,
