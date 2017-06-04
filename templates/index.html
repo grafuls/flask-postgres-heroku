@@ -55,15 +55,12 @@
 				old_xbt_price = new_xbt_price
 				old_eth_price = new_eth_price
 			});
-		}, 60000);
-
-
-	setInterval(function () {
 			$.getJSON('/balance', function (data) {
 				$("#xbt_balance").text(data.xbt_balance);
 				$("#eth_balance").text(data.eth_balance);
 			});
 		}, 20000);
+
 
 </script>
 
