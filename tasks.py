@@ -50,7 +50,7 @@ def shakeThatMoneyMaker():
         if xbt_drop and not eth_drop:
             if balance_xbt > 0:
                 print("Buying ETH with XBT")
-                price = Decimal(ethxbt_price) - Decimal('0.0001')
+                price = Decimal(ethxbt_price) - Decimal('0.00001')
                 result = _order("buy", price, balance_xbt)
                 print(result)
             return
@@ -58,7 +58,7 @@ def shakeThatMoneyMaker():
         if eth_drop and not xbt_drop:
             if balance_eth > 0:
                 print("Selling ETH for XBT")
-                price = Decimal(ethxbt_price) + Decimal('0.0001')
+                price = Decimal(ethxbt_price) + Decimal('0.00001')
                 result = _order("sell", price, balance_eth)
                 print(result)
             return
