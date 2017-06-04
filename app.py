@@ -42,8 +42,8 @@ def index():
             xbt_price=xbt_price,
             eth_price=eth_price,
             usd_balance=round(usd_balance, 5),
-            xbt_balance=balance.xbt,
-            eth_balance=balance.eth,
+            xbt_balance=balance_xbt,
+            eth_balance=balance_eth,
             )
 
 
