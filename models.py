@@ -78,6 +78,3 @@ class Factors(db.Model):
         self.usd = usd
         self.xbt = xbt
         self.eth = eth
-
-db.create_all()
-db.session.commit()
