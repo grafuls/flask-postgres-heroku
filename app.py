@@ -29,10 +29,13 @@ def index():
     xbt_price = ticker['result'][XBT_PAIR]['a'][0]
     eth_price = ticker['result'][ETH_PAIR]['a'][0]
 
-    balance = db.session.query(Ledger).order_by(Ledger.id.desc()).first()
+    balance = krapi.query_private('Balance')
+    balance = balance['result']
+    balance_xbt = Decimal(balance['XXBT'])
+    balance_eth = Decimal(balance['XETH'])
     usd_balance = (
-        (Decimal(balance.xbt) * Decimal(xbt_price)) +
-        (Decimal(balance.eth) * Decimal(eth_price))
+        (balance_xbt * Decimal(xbt_price)) +
+        (balance_eth * Decimal(eth_price))
     )
     return render_template(
             'index.html',
