@@ -78,7 +78,8 @@ def _order(type, price, volume):
         'type': type,
         'ordertype': 'limit',
         'price': price,
-        'volume': volume
+        'volume': volume,
+        'expiretm': '+300',
     }
     krapi.query_private("AddOrder", order)
 
