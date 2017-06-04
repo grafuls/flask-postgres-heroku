@@ -1,5 +1,5 @@
 from decimal import Decimal
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 
@@ -12,7 +12,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku = Heroku(app)
 db = SQLAlchemy(app)
-krapi = krakenex.API()
+api_key = os.environ['KRAKEN_API_KEY']
+private_key = os.environ['KRAKEN_PRIVATE_KEY']
+krapi = krakenex.API(api_key, private_key)
 
 from models import Ledger, User, History  # noqa
 
@@ -51,24 +53,9 @@ def balance():
             )
 
 
-# Save e-mail to database and send to success page
-@app.route('/prereg', methods=['POST'])
-def prereg():
-    email = None
-    if request.method == 'POST':
-        email = request.form['email']
-        if not db.session.query(User).filter(User.email == email).count():
-            reg = User(email)
-            db.session.add(reg)
-            db.session.commit()
-            return render_template('success.html')
-    return render_template('index.html')
-
-
 @app.route('/price/<pairs>', methods=['GET'])
 def price(pairs):
     ticker = krapi.query_public('Ticker', {'pair': pairs})
-    # price = ticker['result'][pair]['a'][0]
     prices = {}
     for pair, price in ticker['result'].items():
         maker_price = price['a'][0]
@@ -80,5 +67,5 @@ def price(pairs):
 
 
 if __name__ == '__main__':
-    app.debug = True
+    # app.debug = True
     app.run()

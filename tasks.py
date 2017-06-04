@@ -12,6 +12,9 @@ celery.config_from_object(__name__)
 celery.conf.update(BROKER_URL=os.environ['REDIS_URL'],
                    CELERY_RESULT_BACKEND=os.environ['REDIS_URL'])
 
+def _get_latest(latest, pair):
+    latest = [x.value for x in latest if x.currency == pair]
+    return latest
 
 @celery.task
 def shakeThatMoneyMaker():
@@ -22,9 +25,9 @@ def shakeThatMoneyMaker():
     eth_drop = False
 
     latest = db.session.query(History).order_by(desc(History.id)).limit(6)
-    xbt_latest = [x.value for x in latest if x.currency == XBT_PAIR]
+    xbt_latest = _get_latest(latest,  XBT_PAIR)
     xbt_average = sum(xbt_latest)/len(xbt_latest)
-    eth_latest = [x.value for x in latest if x.currency == ETH_PAIR]
+    eth_latest = _get_latest(latest, ETH_PAIR)
     eth_average = sum(eth_latest)/len(eth_latest)
 
     ticker = krapi.query_public('Ticker', {'pair': PAIR})
