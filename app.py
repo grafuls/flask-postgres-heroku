@@ -29,8 +29,8 @@ def index():
     xbt_price = ticker['result'][XBT_PAIR]['a'][0]
     eth_price = ticker['result'][ETH_PAIR]['a'][0]
 
-    balance = krapi.query_private('Balance')
-    balance = balance['result']
+    balance_query = krapi.query_private('Balance')
+    balance = balance_query['result']
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
     usd_balance = (
@@ -49,8 +49,8 @@ def index():
 
 @app.route('/balance', methods=['GET'])
 def balance():
-    balance = krapi.query_private('Balance')
-    balance = balance['result']
+    balance_query = krapi.query_private('Balance')
+    balance = balance_query['result']
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
     return jsonify(

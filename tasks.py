@@ -37,11 +37,11 @@ def shakeThatMoneyMaker():
     xbt_drop = Decimal(xbt_price) < xbt_average
     eth_drop = Decimal(eth_price) < eth_average
 
-    balance = krapi.query_private('Balance')
-    balance = balance['result']
+    balance_query = krapi.query_private('Balance')
+    balance = balance_query['result']
 
-    orders = krapi.query_private('OpenOrders')
-    orders = orders['result']
+    orders_query = krapi.query_private('OpenOrders')
+    orders = orders_query['result']
 
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
@@ -50,7 +50,7 @@ def shakeThatMoneyMaker():
         if xbt_drop and not eth_drop:
             if balance_xbt > 0:
                 print("Buying ETH with XBT")
-                price = Decimal(ethxbt_price) - 0.0001
+                price = Decimal(ethxbt_price) - Decimal('0.0001')
                 result = _order("buy", price, balance_xbt)
                 print(result)
             return
@@ -58,7 +58,7 @@ def shakeThatMoneyMaker():
         if eth_drop and not xbt_drop:
             if balance_eth > 0:
                 print("Selling ETH for XBT")
-                price = Decimal(ethxbt_price) + 0.0001
+                price = Decimal(ethxbt_price) + Decimal('0.0001')
                 result = _order("sell", price, balance_eth)
                 print(result)
             return
