@@ -49,10 +49,13 @@ def index():
 
 @app.route('/balance', methods=['GET'])
 def balance():
-    balance = db.session.query(Ledger).order_by(Ledger.id.desc()).first()
+    balance = krapi.query_private('Balance')
+    balance = balance['result']
+    balance_xbt = Decimal(balance['XXBT'])
+    balance_eth = Decimal(balance['XETH'])
     return jsonify(
-                xbt_balance=float(balance.xbt),
-                eth_balance=float(balance.eth),
+                xbt_balance=float(balance_xbt),
+                eth_balance=float(balance_eth),
             )
 
 
