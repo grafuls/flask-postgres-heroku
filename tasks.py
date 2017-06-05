@@ -49,18 +49,16 @@ def shakeThatMoneyMaker():
     if not orders['open']:
         if xbt_drop and not eth_drop:
             if balance_xbt > 0:
-                print("Buying ETH with XBT")
                 price = Decimal(ethxbt_price) - Decimal('0.00001')
-                result = _order("buy", price, balance_xbt)
-                print(result)
+                print("Buying ETH:%s with XBT @%s" % (balance_xbt, price))
+                _order("buy", price, balance_xbt)
             return
 
         if eth_drop and not xbt_drop:
             if balance_eth > 0:
-                print("Selling ETH for XBT")
                 price = Decimal(ethxbt_price) + Decimal('0.00001')
-                result = _order("sell", price, balance_eth)
-                print(result)
+                print("Selling ETH:%s for XBT @%s" % (balance_eth, price))
+                _order("sell", price, balance_eth)
             return
 
     return
@@ -81,7 +79,8 @@ def _order(type, price, volume):
         'volume': volume,
         'expiretm': '+300',
     }
-    krapi.query_private("AddOrder", order)
+    result = krapi.query_private("AddOrder", order)
+    print(result)
 
 
 CELERYBEAT_SCHEDULE = {
