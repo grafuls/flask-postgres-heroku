@@ -37,11 +37,17 @@ def shakeThatMoneyMaker():
     xbt_drop = Decimal(xbt_price) < xbt_average
     eth_drop = Decimal(eth_price) < eth_average
 
-    balance_query = krapi.query_private('Balance')
-    balance = balance_query['result']
+    try:
+        balance_query = krapi.query_private('Balance')
+        print(balance_query)
+        balance = balance_query['result']
 
-    orders_query = krapi.query_private('OpenOrders')
-    orders = orders_query['result']
+        orders_query = krapi.query_private('OpenOrders')
+        print(orders_query)
+        orders = orders_query['result']
+    except Exception as ex:
+        print(ex)
+        return
 
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
