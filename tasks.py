@@ -93,12 +93,15 @@ def _execute_order(type, pair, balance, price):
     if type == "buy":
         price = Decimal(price) - Decimal('0.00001')
         volume = balance / price
+        action = "Buying"
+        source = pair[1:4]
+        target = pair[-3:]
     else:
         price = Decimal(price) + Decimal('0.00001')
         volume = balance * price
-    action = "Buying" if type == "buy" else "Selling"
-    source = pair[1:4]
-    target = pair[-3:]
+        action = "Selling"
+        source = pair[-3:]
+        target = pair[1:4]
     print("%s %s:%.5f for %s @%.5f" % (action, source, volume, target, price))
     assert _order(type, price, volume)
 
