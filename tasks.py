@@ -13,17 +13,24 @@ celery.conf.update(BROKER_URL=os.environ['REDIS_URL'],
                    CELERY_RESULT_BACKEND=os.environ['REDIS_URL'])
 
 ETHXBT_PAIR = 'XETHXXBT'
+XBT_PAIR = 'XXBTZUSD'
+ETH_PAIR = 'XETHZUSD'
+PAIR = ','.join([XBT_PAIR, ETH_PAIR, ETHXBT_PAIR])
+BUY = "buy"
+SELL = "sell"
 
 
 @celery.task
 def shakeThatMoneyMaker():
-    XBT_PAIR = 'XXBTZUSD'
-    ETH_PAIR = 'XETHZUSD'
-    PAIR = ','.join([XBT_PAIR, ETH_PAIR, ETHXBT_PAIR])
     xbt_drop = False
     eth_drop = False
 
-    latest = db.session.query(History).order_by(desc(History.id)).limit(6)
+    try:
+        latest = db.session.query(History).order_by(desc(History.id)).limit(6)
+    except Exception as ex:
+        print(ex)
+        return
+
     xbt_latest = _get_latest(latest,  XBT_PAIR)
     xbt_average = sum(xbt_latest)/len(xbt_latest)
     eth_latest = _get_latest(latest, ETH_PAIR)
@@ -51,23 +58,28 @@ def shakeThatMoneyMaker():
 
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
+    balance_usd = Decimal(balance['ZUSD'])
 
     if not orders['open']:
         if xbt_drop and not eth_drop:
+            if balance_usd > 0:
+                _execute_order(BUY, ETH_PAIR, balance_usd, eth_price)
             if balance_xbt > 0:
-                price = Decimal(ethxbt_price) - Decimal('0.00001')
-                volume = balance_xbt / price
-                print("Buying ETH:%s with XBT @%s" % (volume, price))
-                _order("buy", price, volume)
+                _execute_order(BUY, ETHXBT_PAIR, balance_xbt, ethxbt_price)
             return
 
         if eth_drop and not xbt_drop:
             if balance_eth > 0:
-                price = Decimal(ethxbt_price) + Decimal('0.00001')
-                volume = balance_eth * price
-                print("Selling ETH:%s for XBT @%s" % (volume, price))
-                _order("sell", price, volume)
+                _execute_order(SELL, ETHXBT_PAIR, balance_eth, ethxbt_price)
+            if balance_usd > 0:
+                _execute_order(BUY, XBT_PAIR, balance_usd, xbt_price)
             return
+
+        if xbt_drop and eth_drop:
+            if balance_xbt > 0:
+                _execute_order(SELL, XBT_PAIR, balance_xbt, xbt_price)
+            if balance_eth > 0:
+                _execute_order(SELL, ETH_PAIR, balance_eth, eth_price)
 
     return
 
@@ -75,6 +87,20 @@ def shakeThatMoneyMaker():
 def _get_latest(latest, pair):
     latest = [x.value for x in latest if x.currency == pair]
     return latest
+
+
+def _execute_order(type, pair, balance, price):
+    if type == "buy":
+        price = Decimal(price) - Decimal('0.00001')
+        volume = balance / price
+    else:
+        price = Decimal(price) + Decimal('0.00001')
+        volume = balance * price
+    action = "Buying" if type == "buy" else "Selling"
+    source = pair[1:4]
+    target = pair[-3:]
+    print("%s %s:%s for %s @%s" % (action, source, target, volume, price))
+    assert _order(type, price, volume)
 
 
 def _order(type, price, volume):
@@ -87,8 +113,13 @@ def _order(type, price, volume):
         'volume': volume,
         'expiretm': '+60',
     }
-    result = krapi.query_private("AddOrder", order)
-    print(result)
+    try:
+        result = krapi.query_private("AddOrder", order)
+        print(result)
+    except Exception as ex:
+        print(ex)
+        return False
+    return True
 
 
 CELERYBEAT_SCHEDULE = {
