@@ -17,7 +17,7 @@ ETHXBT_PAIR = 'XETHXXBT'
 
 @celery.task
 def shakeThatMoneyMaker():
-    import ipdb;ipdb.set_trace()
+    import pdb;pdb.set_trace()
     XBT_PAIR = 'XXBTZUSD'
     ETH_PAIR = 'XETHZUSD'
     PAIR = ','.join([XBT_PAIR, ETH_PAIR, ETHXBT_PAIR])
