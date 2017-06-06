@@ -17,7 +17,6 @@ ETHXBT_PAIR = 'XETHXXBT'
 
 @celery.task
 def shakeThatMoneyMaker():
-    import pdb;pdb.set_trace()
     XBT_PAIR = 'XXBTZUSD'
     ETH_PAIR = 'XETHZUSD'
     PAIR = ','.join([XBT_PAIR, ETH_PAIR, ETHXBT_PAIR])
@@ -57,7 +56,7 @@ def shakeThatMoneyMaker():
         if xbt_drop and not eth_drop:
             if balance_xbt > 0:
                 price = Decimal(ethxbt_price) - Decimal('0.00001')
-                volume = balance_xbt * price
+                volume = balance_xbt / price
                 print("Buying ETH:%s with XBT @%s" % (volume, price))
                 _order("buy", price, volume)
             return
@@ -65,7 +64,7 @@ def shakeThatMoneyMaker():
         if eth_drop and not xbt_drop:
             if balance_eth > 0:
                 price = Decimal(ethxbt_price) + Decimal('0.00001')
-                volume = balance_eth
+                volume = balance_eth * price
                 print("Selling ETH:%s for XBT @%s" % (volume, price))
                 _order("sell", price, volume)
             return
