@@ -33,17 +33,19 @@ def index():
     balance = balance_query['result']
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
-    usd_balance = (
+    balance_usd = Decimal(balance['ZUSD'])
+    net_balance = (
         (balance_xbt * Decimal(xbt_price)) +
-        (balance_eth * Decimal(eth_price))
+        (balance_eth * Decimal(eth_price)) +
+        balance_usd
     )
     return render_template(
             'index.html',
             xbt_price=xbt_price,
             eth_price=eth_price,
-            usd_balance=round(usd_balance, 5),
-            xbt_balance=balance_xbt,
-            eth_balance=balance_eth,
+            usd_balance=round(net_balance, 5),
+            xbt_balance=round(balance_xbt, 5),
+            eth_balance=round(balance_eth, 5),
             )
 
 
