@@ -59,27 +59,31 @@ def shakeThatMoneyMaker():
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
     balance_usd = Decimal(balance['ZUSD'])
+    buy_xbt = eth_drop and not xbt_drop
+    buy_eth = xbt_drop and not eth_drop
+    buy_usd = xbt_drop and eth_drop
 
     if not orders['open']:
-        if xbt_drop and not eth_drop:
-            if balance_usd > 0:
-                _execute_order(BUY, ETH_PAIR, balance_usd, eth_price)
+        if buy_eth:
             if balance_xbt > 0:
                 _execute_order(BUY, ETHXBT_PAIR, balance_xbt, ethxbt_price)
+            if balance_usd > 0:
+                _execute_order(BUY, ETH_PAIR, balance_usd, eth_price)
             return
 
-        if eth_drop and not xbt_drop:
+        if buy_xbt:
             if balance_eth > 0:
                 _execute_order(SELL, ETHXBT_PAIR, balance_eth, ethxbt_price)
             if balance_usd > 0:
                 _execute_order(BUY, XBT_PAIR, balance_usd, xbt_price)
             return
 
-        if xbt_drop and eth_drop:
+        if buy_usd:
             if balance_xbt > 0:
                 _execute_order(SELL, XBT_PAIR, balance_xbt, xbt_price)
             if balance_eth > 0:
                 _execute_order(SELL, ETH_PAIR, balance_eth, eth_price)
+            return
 
     return
 
@@ -98,11 +102,13 @@ def _execute_order(type_, pair, balance, price):
         action = "Buying"
         preposition = "with"
     else:
-        volume = balance * price
         action = "Selling"
         preposition = "for"
         if target == "USD":
+            volume = balance / price
             ordertype = "market"
+        else:
+            volume = balance * price
     print(
         "%s %s:%.5f %s %s @%.5f" %
         (action, source, volume, preposition, target, price)
