@@ -102,7 +102,6 @@ def _execute_order(type_, pair, balance, price):
         action = "Selling"
         preposition = "for"
         if target == "USD":
-            price = None
             ordertype = "market"
     print(
         "%s %s:%.5f %s %s @%.5f" %
@@ -116,10 +115,11 @@ def _order(pair, type_, price, volume, ordertype):
         'pair': pair,
         'type': type_,
         'ordertype': ordertype,
-        'price': price,
         'volume': volume,
         'expiretm': '+120',
     }
+    if ordertype == "limit":
+        order['price'] = price
     try:
         result = krapi.query_private("AddOrder", order)
         print(result)
