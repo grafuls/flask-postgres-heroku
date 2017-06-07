@@ -37,12 +37,12 @@ def shakeThatMoneyMaker():
     eth_average = sum(eth_latest)/len(eth_latest)
 
     ticker = krapi.query_public('Ticker', {'pair': PAIR})
-    xbt_price = ticker['result'][XBT_PAIR]['a'][0]
-    eth_price = ticker['result'][ETH_PAIR]['a'][0]
-    ethxbt_price = ticker['result'][ETHXBT_PAIR]['a'][0]
+    xbt_price = Decimal(ticker['result'][XBT_PAIR]['a'][0])
+    eth_price = Decimal(ticker['result'][ETH_PAIR]['a'][0])
+    ethxbt_price = Decimal(ticker['result'][ETHXBT_PAIR]['a'][0])
 
-    xbt_drop = Decimal(xbt_price) < xbt_average
-    eth_drop = Decimal(eth_price) < eth_average
+    xbt_drop = xbt_price < xbt_average
+    eth_drop = eth_price < eth_average
 
     try:
         balance_query = krapi.query_private('Balance')
@@ -89,32 +89,36 @@ def _get_latest(latest, pair):
     return latest
 
 
-def _execute_order(type, pair, balance, price):
-    if type == "buy":
-        price = Decimal(price) - Decimal('0.00001')
-        volume = balance / price
+def _execute_order(type_, pair, balance, price):
+    source = pair[1:4]
+    target = pair[-3:]
+    ordertype = "limit"
+    if type_ == "buy":
+        volume = balance / (price - Decimal('0.00001'))
         action = "Buying"
-        source = pair[1:4]
-        target = pair[-3:]
+        preposition = "with"
     else:
-        price = Decimal(price) + Decimal('0.00001')
         volume = balance * price
         action = "Selling"
-        source = pair[-3:]
-        target = pair[1:4]
-    print("%s %s:%.5f for %s @%.5f" % (action, source, volume, target, price))
-    assert _order(type, price, volume)
+        preposition = "for"
+        if target == "USD":
+            price = None
+            ordertype = "market"
+    print(
+        "%s %s:%.5f %s %s @%.5f" %
+        (action, source, volume, preposition, target, price)
+        )
+    assert _order(pair, type_, price, volume, ordertype)
 
 
-def _order(type, price, volume):
-    pair = ETHXBT_PAIR
+def _order(pair, type_, price, volume, ordertype):
     order = {
         'pair': pair,
-        'type': type,
-        'ordertype': 'limit',
+        'type': type_,
+        'ordertype': ordertype,
         'price': price,
         'volume': volume,
-        'expiretm': '+60',
+        'expiretm': '+120',
     }
     try:
         result = krapi.query_private("AddOrder", order)
