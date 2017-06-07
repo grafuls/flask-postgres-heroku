@@ -55,13 +55,15 @@ def shakeThatMoneyMaker():
 
     xbt_drop = xbt_price < xbt_average
     eth_drop = eth_price < eth_average
+    xbt_mass_drop = xbt_price - 40 < xbt_average
+    eth_mass_drop = eth_price - 40 < eth_average
 
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
     balance_usd = Decimal(balance['ZUSD'])
     buy_xbt = eth_drop and not xbt_drop
     buy_eth = xbt_drop and not eth_drop
-    buy_usd = xbt_drop and eth_drop
+    buy_usd = xbt_mass_drop and eth_mass_drop
 
     if not orders['open']:
         if buy_eth:

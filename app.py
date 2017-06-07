@@ -55,9 +55,11 @@ def balance():
     balance = balance_query['result']
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
+    balance_usd = Decimal(balance['ZUSD'])
     return jsonify(
                 xbt_balance=float(balance_xbt),
                 eth_balance=float(balance_eth),
+                usd_balance=float(balance_usd),
             )
 
 
