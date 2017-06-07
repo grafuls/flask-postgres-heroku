@@ -105,7 +105,7 @@ def _execute_order(type_, pair, balance, price):
         action = "Selling"
         preposition = "for"
         if target == "USD":
-            volume = (balance * price) - Decimal('0.001')
+            volume = balance
             ordertype = "market"
         else:
             volume = (balance / price) - Decimal('0.001')
