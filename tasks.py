@@ -31,6 +31,18 @@ def shakeThatMoneyMaker():
         print(ex)
         return
 
+    try:
+        balance_query = krapi.query_private('Balance')
+        print(balance_query)
+        balance = balance_query['result']
+
+        orders_query = krapi.query_private('OpenOrders')
+        print(orders_query)
+        orders = orders_query['result']
+    except Exception as ex:
+        print(ex)
+        return
+
     xbt_latest = _get_latest(latest,  XBT_PAIR)
     xbt_average = sum(xbt_latest)/len(xbt_latest)
     eth_latest = _get_latest(latest, ETH_PAIR)
@@ -43,18 +55,6 @@ def shakeThatMoneyMaker():
 
     xbt_drop = xbt_price < xbt_average
     eth_drop = eth_price < eth_average
-
-    try:
-        balance_query = krapi.query_private('Balance')
-        print(balance_query)
-        balance = balance_query['result']
-
-        orders_query = krapi.query_private('OpenOrders')
-        print(orders_query)
-        orders = orders_query['result']
-    except Exception as ex:
-        print(ex)
-        return
 
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
@@ -98,17 +98,15 @@ def _execute_order(type_, pair, balance, price):
     target = pair[-3:]
     ordertype = "limit"
     if type_ == "buy":
-        volume = balance / (price - Decimal('0.00001'))
+        volume = (balance / (price - Decimal('0.00001'))) - Decimal('0.00001')
         action = "Buying"
         preposition = "with"
     else:
         action = "Selling"
         preposition = "for"
+        volume = (balance * price) - Decimal('0.001')
         if target == "USD":
-            volume = balance / price
             ordertype = "market"
-        else:
-            volume = balance * price
     print(
         "%s %s:%.5f %s %s @%.5f" %
         (action, source, volume, preposition, target, price)
