@@ -55,8 +55,8 @@ def shakeThatMoneyMaker():
 
     xbt_drop = xbt_price < xbt_average
     eth_drop = eth_price < eth_average
-    xbt_mass_drop = xbt_price - 40 < xbt_average
-    eth_mass_drop = eth_price - 40 < eth_average
+    xbt_mass_drop = xbt_price < xbt_average - 40
+    eth_mass_drop = eth_price < eth_average - 40
 
     balance_xbt = Decimal(balance['XXBT'])
     balance_eth = Decimal(balance['XETH'])
