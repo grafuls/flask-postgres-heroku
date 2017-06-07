@@ -25,7 +25,9 @@
 	old_xbt_price = parseFloat({{ xbt_price }})
 	old_eth_price = parseFloat({{ eth_price }})
 	old_usd_balance = parseFloat({{ usd_balance }})
-	usd_balance = old_usd_balance
+	usd_balance = 0
+	new_xbt_price = 0
+	new_eth_price = 0
 	xbt_balance = parseFloat({{ xbt_balance }})
 	eth_balance = parseFloat({{ eth_balance }})
 
@@ -48,19 +50,23 @@
 				$("#eth_balance").text(data.eth_balance);
 				usd_balance = data.usd_balance
 			});
+
 			$.getJSON(END_POINT.concat(PAIR), function (data) {
 				new_xbt_price = data.prices.XXBTZUSD
 				new_eth_price = data.prices.XETHZUSD
-				new_usd_balance = (xbt_balance * new_xbt_price) + (eth_balance * new_eth_price) + usd_balance
-				$("#xbt_price").text(new_xbt_price);
-				colorizer(new_xbt_price, old_xbt_price, "#xbt_price")
-				$("#eth_price").text(new_eth_price);
-				colorizer(new_eth_price, old_eth_price, "#eth_price")
-				$("#usd_balance").text(new_usd_balance.toFixed(5))
-				colorizer(new_usd_balance, old_usd_balance, "#usd_balance")
-				old_xbt_price = new_xbt_price
-				old_eth_price = new_eth_price
 			});
+
+			$("#xbt_price").text(new_xbt_price);
+			colorizer(new_xbt_price, old_xbt_price, "#xbt_price")
+
+			$("#eth_price").text(new_eth_price);
+			colorizer(new_eth_price, old_eth_price, "#eth_price")
+
+			new_usd_balance = (xbt_balance * new_xbt_price) + (eth_balance * new_eth_price) + usd_balance
+			$("#usd_balance").text(new_usd_balance.toFixed(5))
+			colorizer(new_usd_balance, old_usd_balance, "#usd_balance")
+			old_xbt_price = new_xbt_price
+			old_eth_price = new_eth_price
 		}, 20000);
 
 
