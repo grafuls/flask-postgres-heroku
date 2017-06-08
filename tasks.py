@@ -100,7 +100,7 @@ def _execute_order(type_, pair, balance, price):
     target = pair[-3:]
     ordertype = "limit"
     if type_ == "buy":
-        volume = balance / (price - Decimal('0.00001'))
+        volume = (balance / (price - Decimal('0.00001'))) - Decimal('0.0001')
         action = "Buying"
         preposition = "with"
     else:
