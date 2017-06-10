@@ -21,6 +21,14 @@ SELL = "sell"
 
 
 @celery.task
+def purgeDB():
+    history = History.query.all()
+    if len(history) > 10000:
+        for i in range(len(history) - 1000):
+            db.session.delete(history)
+        db.session.commit()
+
+@celery.task
 def shakeThatMoneyMaker():
     xbt_drop = False
     eth_drop = False
@@ -139,5 +147,9 @@ CELERYBEAT_SCHEDULE = {
     'every-second': {
         'task': 'tasks.shakeThatMoneyMaker',
         'schedule': timedelta(seconds=20),
+    },
+    'every-week': {
+        'task': 'tasks.purgeDB',
+        'schedule': timedelta(days=6),
     },
 }
